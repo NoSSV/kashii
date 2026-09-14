@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d12" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Kashii Slot" />
+  <title>Kashii Slot Analyzer</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">WONDERLAND KASHII II</div>
+        <h1>Kashii Slot Analyzer</h1>
+      </div>
+      <div class="top-actions">
+        <button id="refreshBtn" class="icon-btn" aria-label="更新">↻</button>
+        <button id="installBtn" class="pill ghost hidden">インストール</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section id="statusBanner" class="status-banner hidden"></section>
+
+      <section id="homeView" class="view active">
+        <div class="hero-card">
+          <div>
+            <div class="muted small">今日の注目候補</div>
+            <div id="heroMachine" class="hero-machine">--</div>
+            <div id="heroModel" class="hero-model">データ読込待ち</div>
+          </div>
+          <div class="score-ring" id="heroScoreRing"><span id="heroScore">--</span><small>狙い度</small></div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card"><span class="muted small">対象台</span><strong id="machineCount">0</strong></div>
+          <div class="stat-card"><span class="muted small">対象日数</span><strong id="dayCount">0</strong></div>
+          <div class="stat-card"><span class="muted small">最終データ</span><strong id="latestDate">--</strong></div>
+        </div>
+
+        <div class="section-head">
+          <div><div class="eyebrow">RANKING</div><h2>狙い台 TOP10</h2></div>
+          <button class="text-btn" data-nav="ranking">全部見る</button>
+        </div>
+        <div id="top10" class="ranking-list empty-card">データを読み込むと表示されます。</div>
+
+        <div class="info-card">
+          <div class="info-title">📱 スマホ運用</div>
+          <p>ホーム画面に追加するとアプリのように起動できます。データは端末にも保存され、最後に読み込んだ内容はオフラインでも確認できます。</p>
+        </div>
+      </section>
+
+      <section id="rankingView" class="view">
+        <div class="section-head sticky-section-head">
+          <div><div class="eyebrow">TODAY</div><h2>狙い台ランキング</h2></div>
+        </div>
+        <div class="toolbar">
+          <input id="rankingSearch" type="search" placeholder="台番・機種名で検索" />
+          <select id="modelFilter"><option value="">全機種</option></select>
+          <select id="scoreFilter">
+            <option value="0">全スコア</option>
+            <option value="80">80点以上</option>
+            <option value="70">70点以上</option>
+            <option value="60">60点以上</option>
+          </select>
+        </div>
+        <div id="rankingList" class="ranking-list"></div>
+      </section>
+
+      <section id="machinesView" class="view">
+        <div class="section-head sticky-section-head">
+          <div><div class="eyebrow">MACHINES</div><h2>全台一覧</h2></div>
+        </div>
+        <div class="toolbar">
+          <input id="machineSearch" type="search" placeholder="台番・機種名で検索" />
+          <select id="machineModelFilter"><option value="">全機種</option></select>
+        </div>
+        <div id="machineGrid" class="machine-grid"></div>
+      </section>
+
+      <section id="heatmapView" class="view">
+        <div class="section-head sticky-section-head">
+          <div><div class="eyebrow">HEATMAP</div><h2>10日ヒートマップ</h2></div>
+        </div>
+        <div class="toolbar">
+          <input id="heatSearch" type="search" placeholder="台番・機種名で検索" />
+        </div>
+        <div class="legend"><span><i class="dot low"></i>低</span><span><i class="dot mid"></i>中</span><span><i class="dot high"></i>高</span><span><i class="dot hot"></i>80+</span></div>
+        <div id="heatmapWrap" class="heatmap-wrap empty-card">データを読み込むと表示されます。</div>
+      </section>
+
+      <section id="settingsView" class="view">
+        <div class="section-head"><div><div class="eyebrow">DATA</div><h2>データ・設定</h2></div></div>
+        <div class="settings-card">
+          <h3>CSVを読み込む</h3>
+          <p class="muted">PC版が出力する <code>raw_latest.csv</code> をそのまま選べます。</p>
+          <label class="upload-btn">CSVを選択<input id="csvFile" type="file" accept=".csv,text/csv" hidden /></label>
+        </div>
+        <div class="settings-card">
+          <h3>サーバーデータ</h3>
+          <p class="muted">公開後は <code>data/latest.json</code> を自動で読めます。</p>
+          <button id="loadServerBtn" class="pill">最新JSONを取得</button>
+        </div>
+        <div class="settings-card">
+          <h3>端末データ</h3>
+          <p id="storageInfo" class="muted">保存データなし</p>
+          <button id="clearDataBtn" class="pill danger">端末データを削除</button>
+        </div>
+        <div class="settings-card">
+          <h3>スコアについて</h3>
+          <p class="muted">公開データから作る相対評価です。設定や勝利を保証する数値ではありません。低回転台は極端な高得点になりにくい補正を入れています。</p>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="メインナビゲーション">
+      <button class="nav-item active" data-nav="home"><span>⌂</span><small>ホーム</small></button>
+      <button class="nav-item" data-nav="ranking"><span>★</span><small>ランキング</small></button>
+      <button class="nav-item" data-nav="machines"><span>▦</span><small>全台</small></button>
+      <button class="nav-item" data-nav="heatmap"><span>▥</span><small>ヒート</small></button>
+      <button class="nav-item" data-nav="settings"><span>⚙</span><small>設定</small></button>
+    </nav>
+  </div>
+
+  <dialog id="machineDialog" class="machine-dialog">
+    <div class="dialog-head">
+      <div><div id="dialogMachine" class="eyebrow"></div><h2 id="dialogModel"></h2></div>
+      <button id="closeDialog" class="icon-btn">×</button>
+    </div>
+    <div id="dialogBody"></div>
+  </dialog>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

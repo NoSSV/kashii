@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="116" fill="#0b0d12"/>
+  <path d="M92 148h328v216H92z" rx="32" fill="#171b26"/>
+  <circle cx="170" cy="256" r="64" fill="#ff315c" opacity=".18"/>
+  <circle cx="170" cy="256" r="40" fill="none" stroke="#ff315c" stroke-width="18" stroke-dasharray="188 64" transform="rotate(-70 170 256)"/>
+  <path d="M257 316V201h29v115zm56 0v-82h29v82zm56 0v-145h29v145z" fill="#f5f7fb"/>
+  <text x="105" y="392" fill="#929bad" font-size="34" font-family="Arial,sans-serif" font-weight="700">KASHII II</text>
+</svg>
