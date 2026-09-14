@@ -1,17 +1,17 @@
-Kashii Slot Analyzer PWA v0.2
+【最初にここだけ読めばOK】
 
-【今すぐ試す】
-1. このフォルダをGitHub PagesなどのHTTPSサイトに置く
-2. AndroidのChromeでURLを開く
-3. 右上の「インストール」またはChromeメニュー→「アプリをインストール / ホーム画面に追加」
-4. 初期状態はデモデータ
-5. 実データはアプリ内「設定」→「CSVを選択」からPC版 raw_latest.csv を読み込む
+1. Windows PCでこのフォルダを展開する
+2. setup.bat をダブルクリック（初回だけ）
+3. 以後は run.bat をダブルクリック
+4. 終わると output フォルダが自動で開く
 
-【PC版から公開データを作る】
-PC版の output/raw_latest.csv を tools/sync_from_pc_analyzer.bat にドラッグ＆ドロップ
-→ data/latest.json が更新されます。
+出力物
+- kashii2_analysis.xlsx : Excel
+- dashboard.html       : ブラウザで見るヒートマップ＋狙い台ランキング
+- raw_latest.csv       : 取得した直近データ
 
-【次の開発段階】
-P'sCube自動取得をサーバー側に接続し、スマホを開くだけで最新データになるようにします。
+初回は過去10日分を集めるため時間がかかります。
+2回目以降はSQLiteに蓄積し、基本的に新しい日だけ取得します。
 
-※スコアは公開データの相対分析で、設定や勝利を保証するものではありません。
+もし失敗したら logs/run.log をChatGPTに送ってください。
+403の場合は無理に回避せず停止する設計です。
